@@ -45,6 +45,15 @@ public class Category {
         this.name = name;
     }
 
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = Instant.now();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

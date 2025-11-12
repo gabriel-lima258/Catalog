@@ -31,11 +31,10 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String name, Double price, Instant date, String description, String imgUrl) {
+    public Product(Long id, String name, Double price, String description, String imgUrl) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.date = date;
         this.description = description;
         this.imgUrl = imgUrl;
     }
@@ -84,8 +83,9 @@ public class Product {
         return date;
     }
 
-    public void setDate(Instant date) {
-        this.date = date;
+    @PrePersist
+    public void prePersist() {
+        date = Instant.now();
     }
 
     @Override
