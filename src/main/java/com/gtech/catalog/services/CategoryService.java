@@ -45,6 +45,7 @@ public class CategoryService {
     @Transactional
     public CategoryDTO update(Long id, CategoryDTO dto) {
         try {
+            // usa referencia id e so abre o bd quando salva no repository
             Category entity = repository.getReferenceById(id);
             entity.setName(dto.getName());
             entity = repository.save(entity);

@@ -16,7 +16,7 @@ public class Product {
     private Long id;
     private String name;
     private Double price;
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") // padrao universal utc
     private Instant date;
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -81,6 +81,10 @@ public class Product {
 
     public Instant getDate() {
         return date;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
     }
 
     @PrePersist
