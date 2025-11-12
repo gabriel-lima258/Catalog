@@ -50,19 +50,19 @@ public class CategoryService {
             entity = repository.save(entity);
             return new CategoryDTO(entity);
         } catch (EntityNotFoundException e) {
-            throw new ResourceNotFoundException("ID not found" + id);
+            throw new ResourceNotFoundException("Id " + id + " not found");
         }
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
     public void delete(Long id) {
         if (!repository.existsById(id)) {
-            throw new ResourceNotFoundException("Resource not found");
+            throw new ResourceNotFoundException("Id " + id + " not found");
         }
         try {
             repository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Integrity violation database");
+            throw new DatabaseException("Referential integrity constraint violation database");
         }
     }
 
