@@ -54,7 +54,7 @@ public class ProductServiceTests {
         productDTO = ProductFactoryTest.createProductDTO(); // crio o produto
         page = new PageImpl<>(List.of(product)); // instancio uma page de produtos
 
-        // joga exception quando id for dependente
+        // delete method
         Mockito.doThrow(DataIntegrityViolationException.class).when(productRepository).deleteById(dependentId);
 
         // Mockito simula as chamadas do repository
