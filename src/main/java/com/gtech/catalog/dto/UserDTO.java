@@ -2,6 +2,8 @@ package com.gtech.catalog.dto;
 
 import com.gtech.catalog.entities.User;
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,8 +12,11 @@ import java.util.List;
 public class UserDTO {
 
     private Long id;
+    @NotBlank(message = "Campo obrigatório")
     private String firstName;
+    @NotBlank(message = "Campo obrigatório")
     private String lastName;
+    @Email(message = "Email deve ser válido")
     private String email;
 
     List<RoleDTO> roles = new ArrayList<>();

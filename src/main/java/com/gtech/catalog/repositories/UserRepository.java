@@ -15,4 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
            LIKE UPPER(CONCAT('%', :name, '%'))
            """)
     Page<User> searchByName(String name, Pageable pageable);
+
+    User findByEmail(String email);
 }

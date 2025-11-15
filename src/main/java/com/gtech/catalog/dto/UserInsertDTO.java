@@ -1,10 +1,12 @@
 package com.gtech.catalog.dto;
 
 import com.gtech.catalog.entities.User;
+import com.gtech.catalog.services.validations.UserInsertValid;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@UserInsertValid
 public class UserInsertDTO extends UserDTO {
 
     private String password;

@@ -1,6 +1,10 @@
 package com.gtech.catalog.dto;
 
 import com.gtech.catalog.entities.Product;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -9,8 +13,12 @@ import java.util.List;
 public class ProductDTO {
 
     private Long id;
+    @Size(min = 5, max = 60, message = "Campo deve ter entre 5 a 60 caracteres")
+    @NotBlank(message = "Campo obrigatório")
     private String name;
+    @Positive(message = "Informe um valor positivo")
     private Double price;
+    @PastOrPresent(message = "A data do produto não pode ser futura")
     private Instant date;
     private String description;
     private String imgUrl;
