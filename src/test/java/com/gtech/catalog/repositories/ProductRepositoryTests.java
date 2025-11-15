@@ -1,13 +1,12 @@
 package com.gtech.catalog.repositories;
 
 import com.gtech.catalog.entities.Product;
-import com.gtech.catalog.factory.ProductFactoryTest;
+import com.gtech.catalog.utils.factory.ProductFactoryTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.domain.PageImpl;
 
 import java.util.Optional;
 

@@ -2,7 +2,7 @@ package com.gtech.catalog.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gtech.catalog.dto.CategoryDTO;
-import com.gtech.catalog.factory.CategoryFactoryTest;
+import com.gtech.catalog.utils.factory.CategoryFactoryTest;
 import com.gtech.catalog.services.CategoryService;
 import com.gtech.catalog.services.exceptions.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -25,7 +26,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(CategoryController.class)
+// excluindo as dependencias de security nos testes unitários
+@WebMvcTest(value = CategoryController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 public class CategoryControllerTests {
 
     @Autowired

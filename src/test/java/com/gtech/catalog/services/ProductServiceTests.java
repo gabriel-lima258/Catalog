@@ -2,7 +2,7 @@ package com.gtech.catalog.services;
 
 import com.gtech.catalog.dto.ProductDTO;
 import com.gtech.catalog.entities.Product;
-import com.gtech.catalog.factory.ProductFactoryTest;
+import com.gtech.catalog.utils.factory.ProductFactoryTest;
 import com.gtech.catalog.repositories.CategoryRepository;
 import com.gtech.catalog.repositories.ProductRepository;
 import com.gtech.catalog.services.exceptions.DatabaseException;

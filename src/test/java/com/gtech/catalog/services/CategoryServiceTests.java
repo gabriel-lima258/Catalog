@@ -2,7 +2,7 @@ package com.gtech.catalog.services;
 
 import com.gtech.catalog.dto.CategoryDTO;
 import com.gtech.catalog.entities.Category;
-import com.gtech.catalog.factory.CategoryFactoryTest;
+import com.gtech.catalog.utils.factory.CategoryFactoryTest;
 import com.gtech.catalog.repositories.CategoryRepository;
 import com.gtech.catalog.services.exceptions.DatabaseException;
 import com.gtech.catalog.services.exceptions.ResourceNotFoundException;

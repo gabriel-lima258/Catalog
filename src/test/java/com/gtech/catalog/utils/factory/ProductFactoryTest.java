@@ -1,4 +1,4 @@
-package com.gtech.catalog.factory;
+package com.gtech.catalog.utils.factory;
 
 import com.gtech.catalog.dto.ProductDTO;
 import com.gtech.catalog.entities.Category;
