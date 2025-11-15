@@ -3,6 +3,7 @@ package com.gtech.catalog.services;
 import com.gtech.catalog.dto.RoleDTO;
 import com.gtech.catalog.dto.UserDTO;
 import com.gtech.catalog.dto.UserInsertDTO;
+import com.gtech.catalog.dto.UserUpdateDTO;
 import com.gtech.catalog.entities.Role;
 import com.gtech.catalog.entities.User;
 import com.gtech.catalog.repositories.RoleRepository;
@@ -55,7 +56,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO update(Long id, UserDTO dto) {
+    public UserDTO update(Long id, UserUpdateDTO dto) {
         try {
             User entity = repository.getReferenceById(id);
             copyDtoToEntity(dto, entity);

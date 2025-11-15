@@ -2,6 +2,7 @@ package com.gtech.catalog.controllers;
 
 import com.gtech.catalog.dto.UserDTO;
 import com.gtech.catalog.dto.UserInsertDTO;
+import com.gtech.catalog.dto.UserUpdateDTO;
 import com.gtech.catalog.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +45,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> update(@Valid @PathVariable Long id, @RequestBody UserDTO dto) {
-        dto = service.update(id, dto);
-        return ResponseEntity.ok(dto);
+    public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody UserUpdateDTO dto) {
+        UserDTO newDto = service.update(id, dto);
+        return ResponseEntity.ok(newDto);
     }
 
     @DeleteMapping("/{id}")
