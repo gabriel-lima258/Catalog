@@ -5,6 +5,10 @@ import com.gtech.catalog.dto.ProductDTO;
 import com.gtech.catalog.utils.factory.ProductFactoryTest;
 import com.gtech.catalog.services.ProductService;
 import com.gtech.catalog.services.exceptions.ResourceNotFoundException;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -24,6 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.Instant;
 import java.util.List;
 
 // excluindo as dependencias de security nos testes unitários
