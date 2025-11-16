@@ -55,7 +55,7 @@ public class ProductControllerIntegration {
         existingId = 1L;
         nonExistingId = 1000L;
         dependentId = 5L;
-        countTotalProducts = 25L;
+        countTotalProducts = 26L;
         productDTO = ProductFactoryTest.createProductDTO();
 
         adminUsername = "maria@gmail.com";
@@ -109,7 +109,7 @@ public class ProductControllerIntegration {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(countTotalProducts + 1))
+                .andExpect(jsonPath("$.id").value(countTotalProducts ))
                 .andExpect(jsonPath("$.name").value(expectedName))
                 .andExpect(jsonPath("$.price").value(expectedPrice))
                 .andExpect(jsonPath("$.description").value(expectedDescription))

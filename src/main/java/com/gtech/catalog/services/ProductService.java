@@ -4,6 +4,7 @@ import com.gtech.catalog.dto.CategoryDTO;
 import com.gtech.catalog.dto.ProductDTO;
 import com.gtech.catalog.entities.Category;
 import com.gtech.catalog.entities.Product;
+import com.gtech.catalog.projetions.ProductProjection;
 import com.gtech.catalog.repositories.ProductRepository;
 import com.gtech.catalog.services.exceptions.DatabaseException;
 import com.gtech.catalog.services.exceptions.ResourceNotFoundException;
@@ -11,10 +12,14 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class ProductService {
@@ -30,10 +35,25 @@ public class ProductService {
         return new ProductDTO(entity);
     }
 
+    // use case de listar produtos sem ou com pesquisa de filtros
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findAll(String name, Pageable pageable) {
-        Page<Product> entity = repository.searchByName(name, pageable);
-        return entity.map(x -> new ProductDTO(x));
+    public Page<ProductDTO> findAll(String name, String categoryId, Pageable pageable) {
+        // lista vazia ou array de ids
+        List<Long> categoriesIds = Arrays.asList();
+        if (!"0".equals(categoryId)) {
+            categoriesIds = Arrays.asList(categoryId.split(",")).stream().map(Long::parseLong).toList();
+
+        }
+        // busca auxiliar para coletar id de produtos feitos na filtragem
+        Page<ProductProjection> page = repository.searchProducts(name, categoriesIds, pageable);
+        // capturando os id de produto feito na pesquisa auxiliar anterior
+        List<Long> productsId = page.map(x -> x.getId()).toList();
+        List<Product> entities = repository.searchProductsWithCategories(productsId);
+        List<ProductDTO> dtos = entities.stream().map(x -> new ProductDTO(x, x.getCategories())).toList();
+        // transformando a lista em page
+        Page<ProductDTO> pageDTO = new PageImpl<>(dtos, page.getPageable(), page.getTotalElements());
+
+        return pageDTO;
     }
 
     @Transactional

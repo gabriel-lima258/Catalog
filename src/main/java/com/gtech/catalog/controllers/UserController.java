@@ -32,10 +32,10 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<Page<UserDTO>> findAll(
-            @RequestParam(name = "firstName", defaultValue = "") String name,
+            @RequestParam(name = "firstName", defaultValue = "") String firstName,
             Pageable pageable
     ) {
-        Page<UserDTO> dto = service.findAll(name, pageable);
+        Page<UserDTO> dto = service.findAll(firstName, pageable);
         return ResponseEntity.ok(dto);
     }
 

@@ -12,6 +12,7 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    // consulta de users e roles para autenticação
     @Query(nativeQuery = true , value = """
     SELECT tb_user.email AS username, tb_user.password, tb_role.id AS roleId , tb_role.authority
     FROM tb_user
@@ -21,12 +22,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
     """)
     List<UserDetailsProjection> searchUserAndRolesByEmail(String email);
 
-    @Query(nativeQuery = true, value = """ 
-           SELECT * FROM tb_user
-           WHERE UPPER(first_name)
-           LIKE UPPER(CONCAT('%', :name, '%'))
-           """)
-    Page<User> searchByName(String name, Pageable pageable);
+    // consulta N+1 ManyToMany para consultar o banco somente uma vez, assim reduzindo várias consultas desnecessárias
+    @Query(value = """ 
+           SELECT obj FROM User obj
+           JOIN FETCH obj.roles
+           WHERE UPPER(obj.firstName)
+           LIKE UPPER(CONCAT('%', :firstName, '%'))
+           """,
+            countQuery = "SELECT COUNT(obj) FROM User obj JOIN obj.roles")
+    Page<User> searchByName(String firstName, Pageable pageable);
 
     User findByEmail(String email);
 }

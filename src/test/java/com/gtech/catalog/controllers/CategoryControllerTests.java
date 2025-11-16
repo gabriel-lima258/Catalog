@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -53,8 +54,8 @@ public class CategoryControllerTests {
         categoryDTO = CategoryFactoryTest.createCategoryDTO();
         page = new PageImpl<>(List.of(categoryDTO));
 
-        // findAll
-        Mockito.when(categoryService.findAll(ArgumentMatchers.anyString(),ArgumentMatchers.any())).thenReturn(page);
+
+        Mockito.when(categoryService.findAll()).thenReturn(List.of(categoryDTO));
         // findById
         Mockito.when(categoryService.findById(existingId)).thenReturn(categoryDTO);
         Mockito.when(categoryService.findById(nonExistingId)).thenThrow(ResourceNotFoundException.class);
@@ -70,7 +71,7 @@ public class CategoryControllerTests {
     }
 
     @Test
-    public void findAllShouldReturnPage() throws Exception {
+    public void findAllShouldReturnList() throws Exception {
         mockMvc.perform(get("/categories")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

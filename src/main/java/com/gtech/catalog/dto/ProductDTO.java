@@ -1,5 +1,6 @@
 package com.gtech.catalog.dto;
 
+import com.gtech.catalog.entities.Category;
 import com.gtech.catalog.entities.Product;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PastOrPresent;
@@ -9,6 +10,7 @@ import jakarta.validation.constraints.Size;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class ProductDTO {
 
@@ -44,7 +46,11 @@ public class ProductDTO {
         date = entity.getDate();
         description = entity.getDescription();
         imgUrl = entity.getImgUrl();
-        entity.getCategories().forEach(cat -> this.categories.add(new CategoryDTO(cat)));
+    }
+
+    public ProductDTO(Product entity, Set<Category> categories) {
+        this(entity);
+        categories.forEach(cat -> this.categories.add(new CategoryDTO(cat)));
     }
 
 

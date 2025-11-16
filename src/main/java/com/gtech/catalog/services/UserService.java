@@ -47,8 +47,8 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
-    public Page<UserDTO> findAll(String name, Pageable pageable) {
-        Page<User> entity = repository.searchByName(name, pageable);
+    public Page<UserDTO> findAll(String firstName, Pageable pageable) {
+        Page<User> entity = repository.searchByName(firstName, pageable);
         return entity.map(x -> new UserDTO(x));
     }
 

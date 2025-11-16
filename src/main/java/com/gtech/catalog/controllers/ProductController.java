@@ -1,6 +1,7 @@
 package com.gtech.catalog.controllers;
 
 import com.gtech.catalog.dto.ProductDTO;
+import com.gtech.catalog.projetions.ProductProjection;
 import com.gtech.catalog.services.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,10 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<Page<ProductDTO>> findAll(
             @RequestParam(name = "name", defaultValue = "") String name,
+            @RequestParam(name = "categoryId", defaultValue = "0") String categoryId,
             Pageable pageable
     ) {
-        Page<ProductDTO> dto = service.findAll(name, pageable);
+        Page<ProductDTO> dto = service.findAll(name, categoryId, pageable);
         return ResponseEntity.ok(dto);
     }
 

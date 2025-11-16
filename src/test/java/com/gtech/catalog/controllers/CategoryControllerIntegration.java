@@ -3,7 +3,6 @@ package com.gtech.catalog.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gtech.catalog.dto.CategoryDTO;
 import com.gtech.catalog.entities.Category;
-import com.gtech.catalog.entities.Product;
 import com.gtech.catalog.utils.TokenUtil;
 import com.gtech.catalog.utils.factory.CategoryFactoryTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,10 +34,8 @@ public class CategoryControllerIntegration {
 
     private long existingId;
     private long nonExistingId;
-    private long dependentId;
     private long countTotalProducts;
     private CategoryDTO categoryDTO;
-    private PageImpl<CategoryDTO> page;
 
     String username, password, bearerToken;
 
@@ -47,7 +43,6 @@ public class CategoryControllerIntegration {
     void setUp() throws Exception {
         existingId = 1L;
         nonExistingId = 1000L;
-        dependentId = 5L;
         countTotalProducts = 3L;
         categoryDTO = CategoryFactoryTest.createCategoryDTO();
 
@@ -61,11 +56,9 @@ public class CategoryControllerIntegration {
         mockMvc.perform(get("/categories?page=0&size=12&sort=name,asc")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.totalElements").value(countTotalProducts))
-                .andExpect(jsonPath("$.content").exists())
-                .andExpect(jsonPath("$.content[0].name").value("Computadores"))
-                .andExpect(jsonPath("$.content[1].name").value("Eletrônicos"))
-                .andExpect(jsonPath("$.content[2].name").value("Livros"));
+                .andExpect(jsonPath("$[0].name").value("Computadores"))
+                .andExpect(jsonPath("$[1].name").value("Eletrônicos"))
+                .andExpect(jsonPath("$[2].name").value("Livros"));
     }
 
     @Test
@@ -113,10 +106,11 @@ public class CategoryControllerIntegration {
 
     @Test
     public void insertShouldReturn422WhenAdminLoggedAndBlankName() throws Exception {
-        Category categoryDTO = new Category(1L, " ");
+        Category categoryDTO = new Category(1L, "");
         String jsonBody = objectMapper.writeValueAsString(categoryDTO);
 
-        mockMvc.perform(post("/products")
+        mockMvc.perform(post("/categories")
+                        .header("Authorization", "Bearer " + bearerToken)
                         .content(jsonBody)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))

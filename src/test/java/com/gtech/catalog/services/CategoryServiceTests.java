@@ -16,10 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
@@ -38,7 +35,6 @@ public class CategoryServiceTests {
     private long existingId;
     private long nonExistingId;
     private long dependentId;
-    private PageImpl<Category> page; // PageImpl implica o argumento Page no teste
     private Category category;
     private CategoryDTO categoryDTO;
 
@@ -49,7 +45,6 @@ public class CategoryServiceTests {
         dependentId = 2L;
         category = CategoryFactoryTest.createCategory(); // crio o produto
         categoryDTO = CategoryFactoryTest.createCategoryDTO(); // crio o produto
-        page = new PageImpl<>(List.of(category)); // instancio uma page de produtos
 
         // joga exception quando id for dependente
         Mockito.doThrow(DataIntegrityViolationException.class).when(categoryRepository).deleteById(dependentId);
@@ -59,7 +54,7 @@ public class CategoryServiceTests {
         Mockito.when(categoryRepository.existsById(nonExistingId)).thenReturn(false);
         Mockito.when(categoryRepository.existsById(dependentId)).thenReturn(true); // entidade associada ao category
         // Arguments matches diz qual arg inserido do método
-        Mockito.when(categoryRepository.searchByName(ArgumentMatchers.anyString(),(Pageable)ArgumentMatchers.any())).thenReturn(page);
+        Mockito.when(categoryRepository.findAll(Sort.by("name"))).thenReturn(List.of(category));
 
         Mockito.when(categoryRepository.save(ArgumentMatchers.any())).thenReturn(category);
 
@@ -87,10 +82,9 @@ public class CategoryServiceTests {
 
     @Test
     public void findAllPageShouldReturnPage() {
-        PageRequest pageable = PageRequest.of(0, 10);
-        Page<CategoryDTO> result = service.findAll("Celulares", pageable);
+        List<CategoryDTO> result = service.findAll();
         Assertions.assertNotNull(result);
-        Mockito.verify(categoryRepository).searchByName("Celulares", pageable);
+        Mockito.verify(categoryRepository).findAll(Sort.by("name"));
     }
 
     @Test

@@ -4,8 +4,6 @@ import com.gtech.catalog.dto.CategoryDTO;
 import com.gtech.catalog.services.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -28,11 +26,8 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CategoryDTO>> findAll(
-            @RequestParam(name = "name", defaultValue = "") String name,
-            Pageable pageable
-    ) {
-        Page<CategoryDTO> dto = service.findAll(name, pageable);
+    public ResponseEntity<List<CategoryDTO>> findAll() {
+        List<CategoryDTO> dto = service.findAll();
         return ResponseEntity.ok(dto);
     }
 
