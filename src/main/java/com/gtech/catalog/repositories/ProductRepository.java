@@ -14,12 +14,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     // consulta N+1 ManyToMany para consultar o banco somente uma vez, assim reduzindo várias consultas desnecessárias
     // consulta de products que possuem id de categorias e nome
     @Query(nativeQuery = true, value = """ 
+            SELECT * FROM(
             SELECT DISTINCT tb_product.id, tb_product.name
             FROM tb_product
             INNER JOIN tb_product_category ON  tb_product.id = tb_product_category.product_id
             WHERE (:categoriesId IS NULL OR tb_product_category.category_id IN :categoriesId)
             AND LOWER(tb_product.name) LIKE LOWER(CONCAT('%',:name,'%'))
-            ORDER BY tb_product.name
+            ) AS tb_result
            """,
             countQuery = """ 
             SELECT COUNT(*) FROM(
@@ -28,7 +29,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             INNER JOIN tb_product_category ON  tb_product.id = tb_product_category.product_id
             WHERE (:categoriesId IS NULL OR tb_product_category.category_id IN :categoriesId)
             AND LOWER(tb_product.name) LIKE LOWER(CONCAT('%',:name,'%'))
-            ORDER BY tb_product.name
             ) AS tb_result
            """)
     Page<ProductProjection> searchProducts(String name, List<Long> categoriesId, Pageable pageable);
@@ -37,7 +37,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = """
             SELECT obj FROM Product obj JOIN FETCH obj.categories
             WHERE obj.id IN :productsId
-            ORDER BY obj.name
             """)
     List<Product> searchProductsWithCategories(List<Long> productsId);
 }

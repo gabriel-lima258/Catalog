@@ -8,6 +8,7 @@ import com.gtech.catalog.projetions.ProductProjection;
 import com.gtech.catalog.repositories.ProductRepository;
 import com.gtech.catalog.services.exceptions.DatabaseException;
 import com.gtech.catalog.services.exceptions.ResourceNotFoundException;
+import com.gtech.catalog.utils.Util;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -46,9 +47,12 @@ public class ProductService {
         }
         // busca auxiliar para coletar id de produtos feitos na filtragem
         Page<ProductProjection> page = repository.searchProducts(name, categoriesIds, pageable);
-        // capturando os id de produto feito na pesquisa auxiliar anterior
+        // capturando os id de produto feito na pesquisa auxiliar anterior para o DTO de produto
         List<Long> productsId = page.map(x -> x.getId()).toList();
         List<Product> entities = repository.searchProductsWithCategories(productsId);
+        //noinspection unchecked
+        entities = (List<Product>) Util.replace(page.getContent(), entities);
+
         List<ProductDTO> dtos = entities.stream().map(x -> new ProductDTO(x, x.getCategories())).toList();
         // transformando a lista em page
         Page<ProductDTO> pageDTO = new PageImpl<>(dtos, page.getPageable(), page.getTotalElements());
