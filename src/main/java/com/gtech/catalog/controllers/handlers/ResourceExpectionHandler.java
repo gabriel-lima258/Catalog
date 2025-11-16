@@ -3,6 +3,7 @@ package com.gtech.catalog.controllers.handlers;
 import com.gtech.catalog.dto.errors.CustomErrorDTO;
 import com.gtech.catalog.dto.errors.ValidationErrorDTO;
 import com.gtech.catalog.services.exceptions.DatabaseException;
+import com.gtech.catalog.services.exceptions.EmailException;
 import com.gtech.catalog.services.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -28,6 +29,13 @@ public class ResourceExpectionHandler {
 
     @ExceptionHandler(DatabaseException.class)
     public ResponseEntity<CustomErrorDTO> database(DatabaseException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST; // 400
+        CustomErrorDTO err = new CustomErrorDTO(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(EmailException.class)
+    public ResponseEntity<CustomErrorDTO> emailNotFound(EmailException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.BAD_REQUEST; // 400
         CustomErrorDTO err = new CustomErrorDTO(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
