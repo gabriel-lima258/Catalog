@@ -2,6 +2,8 @@ package com.gtech.catalog.dto;
 
 import com.gtech.catalog.entities.User;
 import com.gtech.catalog.services.validations.UserInsertValid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +11,8 @@ import java.util.List;
 @UserInsertValid
 public class UserInsertDTO extends UserDTO {
 
+    @NotBlank(message = "Campo obrigatório")
+    @Size(min = 8, message = "Deve ter no mínimo 8 caracteres")
     private String password;
 
     public UserInsertDTO() {
